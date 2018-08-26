@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{margin: 0;padding: 0}
+        #oId1{width: 350px;position: relative}
+        ._block{width: 50px;height: 50px;position: absolute;left: 0;top: 0;display: none;background-color: yellow;opacity: 0.4;filter: alpha(opacity=40)}
+        #oId1 #_img1{width: 350px}
+        #oId2  {width: 400px;height: 400px;position: absolute;left: 450px;top: 0;border: 1px solid #000;overflow: hidden}
+    </style>
+    <script>
+        window.onload = function(){
+            var magnifi = new Magnifi();
+            magnifi.init({
+                //配置参数
+                size : 20,
+                width : '300px',
+            });    // 跟随鼠标移动
+           
+        }
+        function Magnifi(){
+            this.Document = document;
+            this.oBlock = this.Document.querySelector('._block');
+            this.oId1 = this.Document.querySelector('#oId1');
+            this.oId2 = this.Document.querySelector('#oId2');
+            this.img = this.Document.querySelector('#_img2');
+            this.cliX = null;
+            this.cliY = null;
+            this.X = null;
+            this.Y = null;
+            this.setting = {
+                //默认参数
+                size : '',
+                width : ''
+            }
+        }
+        Magnifi.prototype.init = function(obj){
+            //移入事件
+            var This = this;
+            objCopy(this.setting,obj) 
+            this.oId1.onmouseover = function(ev){
+                This.oBlock.style.display = 'block';
+                This.move()
+            }
+        }
+        //移动事件
+        Magnifi.prototype.move = function(){
+            var This = this
+            document.onmousemove = function(ev){
+                ev = ev || window.event;
+                This.X = ev.clientX - This.oId1.offsetLeft - (This.oBlock.offsetWidth/2);
+                This.Y = ev.clientY - This.oId1.offsetTop -(This.oBlock.offsetHeight/2) ;
+                //限制左右距离
+                if(This.oBlock.offsetLeft < 0  ){
+                    This.X = 0;
+
+                }else if( This.X > This.oId1.offsetWidth - This.oBlock.offsetWidth  ){
+                    This.X = This.oId1.offsetWidth - This.oBlock.offsetWidth;
+                    This.up()
+                }
+                //限制上下距离
+                if(This.Y.offsetTop < 0 ){
+                    This.Y = 0;
+
+                }else if( This.Y > This.oId1.offsetHeight - This.oBlock.offsetHeight){
+                    This.Y = This.oId1.offsetHeight - This.oBlock.offsetHeight;   
+                    This.up()
+                }
+
+                This.oBlock.style.left = This.X + "px";
+                This.oBlock.style.top = This.Y + "px";
+
+                This.hidden(ev,This.X,This.Y)
+            }
+        }
+ 
+        Magnifi.prototype.hidden = function(ev,X,Y){
+            //找小图0和1的位置，来区别头和尾
+            // 最大值除最大值等于1； 0除最大值等于0；
+            this.cliX = X/(this.oId1.offsetWidth - this.oBlock.offsetWidth);
+            this.cliY = Y/(this.oId1.offsetHeight - this.oBlock.offsetHeight);
+            console.log(X)
+            this.img.style.left = -this.cliX * (this.img.offsetWidth - this.oId2.offsetWidth) + 'px';
+            this.img.style.top = -this.cliY * (this.img.offsetHeight - this.oId2.offsetHeight) + 'px';
+
+        }
+        //移出事件
+        Magnifi.prototype.up = function(){
+            var This = this;
+            this.oId1.onmouseout = function(){
+                This.oBlock.style.display = "none";
+            }
+            
+        }
+
+      //  将配置参数赋值去默认参数。
+     function objCopy(obj1,obj2 ){
+            for( arr  in obj2){
+                obj1[arr] = obj2[arr]
+            }
+            return
+        };
+
+    </script>
+</head>
+<body>
+    <div id="oId1">
+        <img id="_img1" src="image/phone_small.jpg" />
+        <span class="_block"></span>
+    </div>
+    <div id="oId2">
+        <img id="_img2" style="position: absolute;" src="image/phone_big.jpg" />
+\    </div>
+</body>
+</html>
