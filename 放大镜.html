@@ -10,7 +10,7 @@
         #oId1{width: 350px;position: relative}
         ._block{width: 50px;height: 50px;position: absolute;left: 0;top: 0;display: none;background-color: yellow;opacity: 0.4;filter: alpha(opacity=40)}
         #oId1 #_img1{width: 350px}
-        #oId2  {width: 400px;height: 400px;position: absolute;left: 450px;top: 0;border: 1px solid #000;overflow: hidden}
+        #oId2  {width: 400px;height: 400px;position: absolute;left: 450px;top: 0;overflow: hidden}
     </style>
     <script>
         window.onload = function(){
@@ -45,6 +45,7 @@
             this.oId1.onmouseover = function(ev){
                 This.oBlock.style.display = 'block';
                 This.move()
+                This.img.style.display = 'block';
             }
         }
         //移动事件
@@ -93,6 +94,7 @@
             var This = this;
             this.oId1.onmouseout = function(){
                 This.oBlock.style.display = "none";
+                This.img.style.display = "none";
             }
             
         }
@@ -113,7 +115,7 @@
         <span class="_block"></span>
     </div>
     <div id="oId2">
-        <img id="_img2" style="position: absolute;" src="image/phone_big.jpg" />
+        <img id="_img2" style="position: absolute;display: none" src="image/phone_big.jpg" />
 \    </div>
 </body>
 </html>
